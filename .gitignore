@@ -1,0 +1,5 @@
+bin
+iso_root
+limine-binary
+obj
+*.iso
