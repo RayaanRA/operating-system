@@ -60,7 +60,8 @@ override CFLAGS += \
     -mcmodel=kernel
 
 override CPPFLAGS := \
-    -I src \
+    -I kernel/src \
+    -I include \
     $(CPPFLAGS) \
     -MMD \
     -MP
@@ -78,7 +79,7 @@ override LDFLAGS += \
     --gc-sections \
     -T linker.lds
 
-override SRCFILES := $(shell find -L src -type f 2>/dev/null | LC_ALL=C sort)
+override SRCFILES := $(shell find -L kernel -type f 2>/dev/null | LC_ALL=C sort)
 override CFILES := $(filter %.c,$(SRCFILES))
 override ASFILES := $(filter %.S,$(SRCFILES))
 override NASMFILES := $(filter %.asm,$(SRCFILES))
