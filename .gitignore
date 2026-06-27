@@ -1,5 +1,3 @@
-bin
-iso_root
+build
 limine-binary
-obj
 *.iso
