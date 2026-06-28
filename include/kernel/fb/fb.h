@@ -4,6 +4,6 @@
 #include <stdbool.h>
 
 bool fb_init();
-void kprint(const char *str);
+void kprint(const char *str, ...);
 
 #endif

@@ -28,7 +28,7 @@ void kmain(void) {
 		hcf();
 	}
 
-	kprint("Welcome to the Operating System.");
+	kprint("Welcome to the Operating System. Testing int: %d", 16);
 
 	hcf();
 }

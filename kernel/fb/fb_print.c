@@ -1,7 +1,9 @@
+#include <stdarg.h>
 #include <fb/fb.h>
 #include "fb_p.h"
 
 void put_char(char c);
+void put_int(int32_t i);
 
 static uint8_t PC_FACE_MODERNOS_FONT[256][FONT_HEIGHT] = {
   {0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00}, // {} (0)
@@ -291,10 +293,40 @@ void put_char(char c) {
 	}
 }
 
-void kprint(const char* s) {
-	for (size_t i = 0; s[i] != '\0'; i++) {
-		put_char(s[i]);
-	}
+void put_int(int32_t i) {
+  // reverse integer first
+  int32_t n = 0;
+  while (i != 0) {
+    int32_t r = i % 10;
+    n = n * 10 + r;
+    i /= 10;
+  }
+
+  // extract each char and print
+  while (n != 0) {
+    put_char((char) (n % 10) + '0');
+    n /= 10;
+  }
+}
+
+void kprint(const char* s, ...) {
+  va_list args;
+  va_start(args, s);
+	while (*s) {
+    if (*s == '%') {
+      s++;
+      switch (*s) {
+      case 'd':
+        int32_t i = va_arg(args, int32_t);
+        put_int(i);
+        s++;
+        break;
+      }
+    }
+    put_char(*s);
+    s++;
+  }
+  va_end(args);
 }
 
 
