@@ -33,7 +33,7 @@ void kmain(void) {
 		hcf();
 	}
 
-	write_serial('R');
+	write_serial_string("Serial string write test");
 
 	kprint("Welcome to the Operating System. Testing int: %d", 16);
 

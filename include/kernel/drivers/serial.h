@@ -7,6 +7,7 @@
 
 uint8_t init_serial();
 void write_serial(char c);
+void write_serial_string(const char *s);
 char read_serial();
 
 #endif
