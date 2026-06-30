@@ -3,6 +3,7 @@
 #include <stdbool.h>
 #include <limine/limine.h>
 #include <fb/fb.h>
+#include <drivers/serial.h>
 
 __attribute__((used, section(".limine_requests")))
 static volatile uint64_t limine_base_revision[] = LIMINE_BASE_REVISION(6);
@@ -24,9 +25,15 @@ void kmain(void) {
 		hcf();
 	}
 
-	if (!fb_init()) {
+	if (fb_init() != 0) {
 		hcf();
 	}
+
+	if (init_serial() != 0) {
+		hcf();
+	}
+
+	write_serial('R');
 
 	kprint("Welcome to the Operating System. Testing int: %d", 16);
 
