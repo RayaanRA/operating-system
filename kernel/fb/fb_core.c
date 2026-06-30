@@ -1,5 +1,6 @@
 #include <fb/fb.h>
 #include <limine/limine.h>
+#include <lib/kprintf.h>
 #include "fb_p.h"
 
 __attribute__((used, section(".limine_requests")))
@@ -22,4 +23,3 @@ void draw_pixel(int32_t x, int32_t y, uint64_t color) {
 	uint32_t *fb_ptr = framebuffer->address;
 	fb_ptr[y * (framebuffer->pitch / 4) + x] = color;
 }
-

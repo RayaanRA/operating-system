@@ -5,6 +5,6 @@
 #include <stdint.h>
 
 uint8_t fb_init();
-void kprint(const char *str, ...);
+void fb_put_char(char c);
 
 #endif

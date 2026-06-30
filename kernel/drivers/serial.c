@@ -1,10 +1,11 @@
 #include <drivers/serial.h>
 #include <arch/x86_64/io.h>
+#include <lib/kprintf.h>
 
 uint8_t serial_received();
 uint8_t is_transmit_empty();
 
-uint8_t init_serial() {
+uint8_t serial_init() {
 	outb(PORT + 1, 0x00);
 	outb(PORT + 3, 0x80);
 	outb(PORT + 0, 0x03);
@@ -24,24 +25,17 @@ uint8_t init_serial() {
 }
 
 uint8_t serial_received() {
-	return inb(PORT + 5) & 1; // check Data ready (DR) bit  of Line Status Register
+	return inb(PORT + 5) & 1; // check Data ready (DR) bit of Line Status Register
 }
 
 uint8_t is_transmit_empty() {
 	return inb(PORT + 5) & 0x20; // check Transmitter holding register empty (THRE) of LSR
 }
 
-void write_serial(char c) {
+void serial_put_char(char c) {
 	while (is_transmit_empty() == 0);
 
 	outb(PORT, c);
-}
-
-void write_serial_string(const char *s) {
-	while (*s) {
-		write_serial(*s);
-		s++;
-	}
 }
 
 char read_serial() {

@@ -5,9 +5,8 @@
 
 #define PORT 0x3f8 // COM1
 
-uint8_t init_serial();
-void write_serial(char c);
-void write_serial_string(const char *s);
+uint8_t serial_init();
 char read_serial();
+void serial_put_char(char c);
 
 #endif

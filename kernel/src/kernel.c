@@ -4,6 +4,7 @@
 #include <limine/limine.h>
 #include <fb/fb.h>
 #include <drivers/serial.h>
+#include <lib/kprintf.h>
 
 __attribute__((used, section(".limine_requests")))
 static volatile uint64_t limine_base_revision[] = LIMINE_BASE_REVISION(6);
@@ -29,13 +30,12 @@ void kmain(void) {
 		hcf();
 	}
 
-	if (init_serial() != 0) {
+	if (serial_init() != 0) {
 		hcf();
 	}
 
-	write_serial_string("Serial string write test");
-
-	kprint("Welcome to the Operating System. Testing int: %d", 16);
+	kprintf_screen("Printing to screen: %d", -16);
+	kprintf_serial("Writing to serial: %d", -32);
 
 	hcf();
 }
