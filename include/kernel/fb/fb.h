@@ -2,8 +2,9 @@
 #define FB_H
 
 #include <stdbool.h>
+#include <stdint.h>
 
-bool fb_init();
+uint8_t fb_init();
 void kprint(const char *str, ...);
 
 #endif

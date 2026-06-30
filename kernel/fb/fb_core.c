@@ -10,12 +10,12 @@ static volatile struct limine_framebuffer_request framebuffer_request = {
 
 static struct limine_framebuffer *framebuffer;
 
-bool fb_init() {
+uint8_t fb_init() {
 	if (framebuffer_request.response == NULL || framebuffer_request.response->framebuffer_count < 1) {
-		return false;
+		return 1;
 	}
 	framebuffer = framebuffer_request.response->framebuffers[0];
-	return true;
+	return 0;
 }
 
 void draw_pixel(int32_t x, int32_t y, uint64_t color) {
