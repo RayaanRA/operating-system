@@ -5,6 +5,7 @@
 #include <fb/fb.h>
 #include <drivers/serial.h>
 #include <lib/kprintf.h>
+#include <mem/pmm.h>
 
 __attribute__((used, section(".limine_requests")))
 static volatile uint64_t limine_base_revision[] = LIMINE_BASE_REVISION(6);
@@ -31,6 +32,10 @@ void kmain(void) {
 	}
 
 	if (serial_init() != 0) {
+		hcf();
+	}
+
+	if (pmm_init() != 0) {
 		hcf();
 	}
 
