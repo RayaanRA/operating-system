@@ -4,7 +4,7 @@
 #include <stddef.h>
 #include <stdarg.h>
 
-static void put_int(void (*put_char)(char), int32_t i);
+static void put_int(void (*put_char)(char), int64_t i);
 static void kprintf(void (*put_char)(char), const char *s, va_list args);
 
 void kprintf(void (*put_char)(char), const char *s, va_list args) {
@@ -13,7 +13,7 @@ void kprintf(void (*put_char)(char), const char *s, va_list args) {
       s++;
       switch (*s) {
       case 'd':
-        int32_t i = va_arg(args, int32_t);
+        int32_t i = va_arg(args, int64_t);
         put_int(put_char, i);
         s++;
         break;
@@ -25,7 +25,7 @@ void kprintf(void (*put_char)(char), const char *s, va_list args) {
   }
 }
 
-void put_int(void (*put_char)(char), int32_t i) {
+void put_int(void (*put_char)(char), int64_t i) {
 	if (i < 0) {
 		put_char('-');
 		i = -i;
