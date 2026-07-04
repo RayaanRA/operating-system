@@ -1,5 +1,4 @@
-#include <stddef.h>
-#include <stdint.h>
+#include <lib/string.h>
 
 int memcmp(const void *s1, const void *s2, size_t n) {
 	const uint8_t *p1 = s1;

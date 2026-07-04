@@ -1,5 +1,4 @@
-#include <stddef.h>
-#include <stdint.h>
+#include <lib/string.h>
 
 void *memmove(void *dest, const void *src, size_t n) {
 	uint8_t *pdest = dest;

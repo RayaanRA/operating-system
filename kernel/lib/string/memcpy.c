@@ -1,5 +1,4 @@
-#include <stddef.h>
-#include <stdint.h>
+#include <lib/string.h>
 
 void *memcpy(void *restrict dest, const void *restrict src, size_t n) {
 	uint8_t *restrict pdest = dest;
