@@ -6,6 +6,8 @@ BUILD_DIR := ../build/kernel
 OBJ_DIR := $(BUILD_DIR)/obj
 BIN_DIR := $(BUILD_DIR)/bin
 
+ARCH ?= x86_64
+
 TOOLCHAIN :=
 TOOLCHAIN_PREFIX :=
 ifneq ($(TOOLCHAIN),)
@@ -32,53 +34,40 @@ CPPFLAGS :=
 NASMFLAGS := -g
 LDFLAGS :=
 
-override CC_IS_CLANG := $(shell ! $(CC) --version 2>/dev/null | grep -q '^Target: '; echo $$?)
+ifeq ($(ARCH),x86_64)
 
-ifeq ($(CC_IS_CLANG),1)
-    override CC += \
-        -target x86_64-unknown-none-elf
+    CFLAGS += \
+        -Wall -Wextra -std=gnu11 \
+        -ffreestanding -fno-stack-protector -fno-stack-check \
+        -fno-lto -fno-PIC \
+        -ffunction-sections -fdata-sections \
+        -m64 -march=x86-64 -mabi=sysv \
+        -mno-80387 -mno-mmx -mno-sse -mno-sse2 \
+        -mno-red-zone -mcmodel=kernel \
+        -DARCH_X86_64
+
+    LDFLAGS += \
+        -m elf_x86_64 \
+        -nostdlib -static \
+        -z max-page-size=0x1000 \
+        --gc-sections \
+        -T linker/x86_64.lds
+
+    NASMFLAGS += -f elf64
+
 endif
 
-override CFLAGS += \
-    -Wall \
-    -Wextra \
-    -std=gnu11 \
-    -ffreestanding \
-    -fno-stack-protector \
-    -fno-stack-check \
-    -fno-lto \
-    -fno-PIC \
-    -ffunction-sections \
-    -fdata-sections \
-    -m64 \
-    -march=x86-64 \
-    -mabi=sysv \
-    -mno-80387 \
-    -mno-mmx \
-    -mno-sse \
-    -mno-sse2 \
-    -mno-red-zone \
-    -mcmodel=kernel
-
-override CPPFLAGS := \
+CPPFLAGS := \
     -I ../include \
     -I ../include/kernel \
     $(CPPFLAGS) \
-    -MMD \
-    -MP
+    -MMD -MP
 
-override NASMFLAGS := \
-    -f elf64 \
-    $(patsubst -g,-g -F dwarf,$(NASMFLAGS)) \
-    -Wall
+override CC_IS_CLANG := $(shell ! $(CC) --version 2>/dev/null | grep -q '^Target: '; echo $$?)
 
-override LDFLAGS += \
-    -m elf_x86_64 \
-    -nostdlib \
-    -static \
-    -z max-page-size=0x1000 \
-    --gc-sections \
-    -T linker/x86_64.lds
+ifeq ($(CC_IS_CLANG),1)
+    override CC += -target x86_64-unknown-none-elf
+endif
 
 override SRCFILES := $(shell find -L . -type f 2>/dev/null | LC_ALL=C sort)
 override CFILES := $(filter %.c,$(SRCFILES))
@@ -99,7 +88,7 @@ all: $(BIN_DIR)/$(OUTPUT)
 
 -include $(HEADER_DEPS)
 
-$(BIN_DIR)/$(OUTPUT): GNUmakefile linker/x86_64.lds $(OBJ)
+$(BIN_DIR)/$(OUTPUT): GNUmakefile linker/$(ARCH).lds $(OBJ)
 	mkdir -p "$(dir $@)"
 	$(LD) $(LDFLAGS) $(OBJ) -o $@
 

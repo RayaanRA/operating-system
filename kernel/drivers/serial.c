@@ -1,5 +1,5 @@
 #include <drivers/serial.h>
-#include <arch/x86_64/io.h>
+#include <arch/arch.h>
 #include <lib/kprintf.h>
 
 uint8_t serial_received();

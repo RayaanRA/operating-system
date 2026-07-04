@@ -6,12 +6,14 @@ KERNEL := $(BUILD)/kernel/bin/os
 
 LIMINE := limine-binary
 
+ARCH ?= x86_64
+
 .PHONY: all kernel iso clean run
 
 all: iso
 
 kernel:
-	$(MAKE) -C kernel
+	$(MAKE) -C kernel ARCH=$(ARCH)
 
 iso: kernel
 	rm -rf $(ISO_ROOT)
