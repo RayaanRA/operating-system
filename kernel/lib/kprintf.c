@@ -5,6 +5,7 @@
 #include <stdarg.h>
 
 static void put_int(void (*put_char)(char), int64_t i);
+static void put_uint(void (*put_char)(char), uint64_t i);
 static void kprintf(void (*put_char)(char), const char *s, va_list args);
 
 void kprintf(void (*put_char)(char), const char *s, va_list args) {
@@ -13,10 +14,13 @@ void kprintf(void (*put_char)(char), const char *s, va_list args) {
       s++;
       switch (*s) {
       case 'd':
-        int32_t i = va_arg(args, int64_t);
-        put_int(put_char, i);
+        put_int(put_char, va_arg(args, int64_t));
         s++;
         break;
+      case 'u':
+    		put_uint(put_char, va_arg(args, uint64_t));
+    		s++;
+    		break;
       }
     } else {
     	put_char(*s);
@@ -33,6 +37,14 @@ void put_int(void (*put_char)(char), int64_t i) {
 
 	if (i / 10 != 0) {
 		put_int(put_char, i / 10);
+	}
+
+	put_char((i % 10) + '0');
+}
+
+void put_uint(void (*put_char)(char), uint64_t i) {
+	if (i / 10 != 0) {
+		put_uint(put_char, i / 10);
 	}
 
 	put_char((i % 10) + '0');
