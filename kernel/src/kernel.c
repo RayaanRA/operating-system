@@ -39,8 +39,9 @@ void kmain(void) {
 		hcf();
 	}
 
-	kprintf_screen("Printing to screen: %d", -16);
-	kprintf_serial("Writing to serial: %d", -32);
+	uint64_t pages = count_usable_pages();
+	kprintf_screen("Number of usable pages found: %u", pages);
+	kprintf_serial("Number of usable pages found: %u", pages);
 
 	hcf();
 }
