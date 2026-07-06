@@ -277,14 +277,14 @@ void fb_put_char(char c) {
 						int32_t screen_x = (x * SCALE_FACTOR) + sx + cursor_x;
 						int32_t screen_y = (y * SCALE_FACTOR) + sy + cursor_y;
 
-            draw_pixel(screen_x, screen_y, 0x0000000000FF0000);
+            draw_pixel(screen_x, screen_y, GREEN);
 					}
 				}
 			}
 		}
 	}
 	cursor_x += FONT_WIDTH * SCALE_FACTOR;
-	if (cursor_x > FONT_WIDTH * SCALE_FACTOR * 50) {
+	if (cursor_x > FONT_WIDTH * SCALE_FACTOR * 78) {
 		cursor_x = 0;
 		cursor_y += FONT_HEIGHT * SCALE_FACTOR;
 	}
