@@ -19,7 +19,7 @@ static volatile struct limine_hhdm_request hhdm_request = {
 uint64_t find_highest_addr();
 void place_bitmap();
 void populate_bitmap();
-void print_bitmap();
+void print_bitmap_byte(uint64_t i);
 
 static uint64_t entry_count;
 static uint8_t *bitmap;
@@ -46,7 +46,6 @@ uint8_t pmm_init() {
 	bitmap_size = bitmap_pages * PAGE_FRAME_SIZE;
 	place_bitmap();
 	populate_bitmap();
-	print_bitmap();
 	return 0;
 }
 
@@ -82,33 +81,44 @@ void populate_bitmap() {
 
         uint64_t start_page = entries[i]->base / PAGE_FRAME_SIZE;
         uint64_t page_count = entries[i]->length / PAGE_FRAME_SIZE;
-        for (uint64_t i = 0; i < page_count; i++) {
+        for (uint64_t i = 0; i < page_count; i++) { 
             uint64_t current_page = start_page + i;
-            uint64_t byte_idx = current_page / 8;
-            uint8_t bit_idx = current_page % 8;
+            uint64_t byte_i = current_page / 8;
+            uint8_t bit_i = current_page % 8;
 
-            bitmap[byte_idx] &= ~(1 << bit_idx);
+            bitmap[byte_i] &= ~(1 << bit_i);
         }
     }
 }
 
-void print_bitmap() {
-    kprintf_screen("Bitmap test: [");
-    size_t test_limit = (bitmap_bytes > 100) ? 100 : bitmap_bytes;
+uint64_t pmm_allocate() {
+	uint64_t phys_addr = 0;
+	for (uint64_t i = 0; i < bitmap_bytes; i++) {
+		for (size_t j = 0; j < 8; j++) {
+        	if (!((bitmap[i] >> j) & 1)) {
+            	kprintf_screen("Byte %u before alloc: ", i);
+            	print_bitmap_byte(i);
+            	bitmap[i] |= 1 << j;
+            	kprintf_screen("Byte %u after alloc: ", i);
+            	print_bitmap_byte(i);            	
+            	phys_addr = ((i * 8) + j) * PAGE_FRAME_SIZE;
+            	goto loop_end;
+        	} 				
+		}
+	}
+	loop_end:
+	return phys_addr;
+}
 
-    for (size_t i = 0; i < test_limit; i++) {
-        for (int j = 0; j < 8; j++) {
-            if ((bitmap[i] >> j) & 1) {
-                kprintf_screen("1");
-            } else {
-                kprintf_screen("0");
-            }
+void print_bitmap_byte(uint64_t i) {
+    kprintf_screen("[");
+
+    for (size_t j = 8; j > 0; j--) {
+        if ((bitmap[i] >> (j - 1)) & 1) {
+            kprintf_screen("1");
+        } else {
+            kprintf_screen("0");
         }
-        
-        if (i < test_limit - 1) {
-            kprintf_screen(" ");
-        }
-    }
-    
-    kprintf_screen("]");
+    }    
+    kprintf_screen("]\n");
 }

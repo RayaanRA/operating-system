@@ -38,6 +38,13 @@ void kmain(void) {
 	if (pmm_init() != 0) {
 		hcf();
 	}
-	
+
+	uint64_t phys_addr = pmm_allocate();
+	kprintf_screen("Page physical address: %u\n", phys_addr);
+
+	kprintf_screen("\nSecond alloc\n");
+	phys_addr = pmm_allocate();
+	kprintf_screen("Page physical address: %u\n", phys_addr);	
+
 	hcf();
 }
