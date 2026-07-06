@@ -38,10 +38,6 @@ void kmain(void) {
 	if (pmm_init() != 0) {
 		hcf();
 	}
-
-	uint64_t pages = count_usable_pages();
-	kprintf_screen("Number of usable pages found: %u", pages);
-	kprintf_serial("Number of usable pages found: %u", pages);
-
+	
 	hcf();
 }

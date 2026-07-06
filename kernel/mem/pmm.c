@@ -18,6 +18,8 @@ static volatile struct limine_hhdm_request hhdm_request = {
 
 uint64_t find_highest_addr();
 void place_bitmap();
+void populate_bitmap();
+void print_bitmap();
 
 static uint64_t entry_count;
 static uint8_t *bitmap;
@@ -43,6 +45,8 @@ uint8_t pmm_init() {
 	bitmap_pages = (bitmap_bytes + (PAGE_FRAME_SIZE - 1)) / PAGE_FRAME_SIZE;
 	bitmap_size = bitmap_pages * PAGE_FRAME_SIZE;
 	place_bitmap();
+	populate_bitmap();
+	print_bitmap();
 	return 0;
 }
 
@@ -70,12 +74,41 @@ void place_bitmap() {
 	}
 }
 
-uint64_t count_usable_pages() {
-	uint64_t pages = 0;
-	for (size_t i = 0; i < entry_count; i++) {
-		if (entries[i]->type == LIMINE_MEMMAP_USABLE) {
-			pages += (entries[i]->length + (PAGE_FRAME_SIZE - 1)) / PAGE_FRAME_SIZE;
-		}
-	}
-	return pages;	
+void populate_bitmap() {
+    for (size_t i = 0; i < entry_count; i++) {
+        if (entries[i]->type != LIMINE_MEMMAP_USABLE) {
+            continue;
+        }
+
+        uint64_t start_page = entries[i]->base / PAGE_FRAME_SIZE;
+        uint64_t page_count = entries[i]->length / PAGE_FRAME_SIZE;
+        for (uint64_t i = 0; i < page_count; i++) {
+            uint64_t current_page = start_page + i;
+            uint64_t byte_idx = current_page / 8;
+            uint8_t bit_idx = current_page % 8;
+
+            bitmap[byte_idx] &= ~(1 << bit_idx);
+        }
+    }
+}
+
+void print_bitmap() {
+    kprintf_screen("Bitmap test: [");
+    size_t test_limit = (bitmap_bytes > 100) ? 100 : bitmap_bytes;
+
+    for (size_t i = 0; i < test_limit; i++) {
+        for (int j = 0; j < 8; j++) {
+            if ((bitmap[i] >> j) & 1) {
+                kprintf_screen("1");
+            } else {
+                kprintf_screen("0");
+            }
+        }
+        
+        if (i < test_limit - 1) {
+            kprintf_screen(" ");
+        }
+    }
+    
+    kprintf_screen("]");
 }
