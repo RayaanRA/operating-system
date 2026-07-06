@@ -265,6 +265,11 @@ static int32_t cursor_x = 0;
 static int32_t cursor_y = 0; 
 
 void fb_put_char(char c) {
+  if (c == '\n' || c == '\r') {
+    newline();
+    return;
+  }
+
 	uint8_t *glyph = PC_FACE_MODERNOS_FONT[(uint8_t)c];
 
 	for (size_t y = 0; y < FONT_HEIGHT; y++) {
@@ -285,7 +290,11 @@ void fb_put_char(char c) {
 	}
 	cursor_x += FONT_WIDTH * SCALE_FACTOR;
 	if (cursor_x > FONT_WIDTH * SCALE_FACTOR * 78) {
-		cursor_x = 0;
-		cursor_y += FONT_HEIGHT * SCALE_FACTOR;
+    newline();
 	}
+}
+
+void newline() {
+  cursor_x = 0;
+  cursor_y += FONT_HEIGHT * SCALE_FACTOR;
 }

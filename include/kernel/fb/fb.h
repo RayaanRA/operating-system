@@ -6,5 +6,6 @@
 
 uint8_t fb_init();
 void fb_put_char(char c);
+void newline();
 
 #endif

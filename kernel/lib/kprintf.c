@@ -22,10 +22,11 @@ void kprintf(void (*put_char)(char), const char *s, va_list args) {
     		s++;
     		break;
       }
-    } else {
-    	put_char(*s);
-    	s++;
-	}
+      continue;
+    }
+
+    put_char(*s);
+    s++;
   }
 }
 
