@@ -6,6 +6,7 @@
 #include <drivers/serial.h>
 #include <lib/kprintf.h>
 #include <mem/pmm.h>
+#include <gdt/gdt.h>
 
 __attribute__((used, section(".limine_requests")))
 static volatile uint64_t limine_base_revision[] = LIMINE_BASE_REVISION(6);
@@ -39,12 +40,11 @@ void kmain(void) {
 		hcf();
 	}
 
-	uint64_t phys_addr = pmm_allocate();
-	kprintf_screen("Page physical address: %u\n", phys_addr);
+	if (init_gdt() != 0) {
+		hcf();
+	}
 
-	kprintf_screen("\nSecond alloc\n");
-	phys_addr = pmm_allocate();
-	kprintf_screen("Page physical address: %u\n", phys_addr);	
+	kprintf_screen("GDT initialization successful.");	
 
 	hcf();
 }
