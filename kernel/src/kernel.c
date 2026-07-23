@@ -7,6 +7,7 @@
 #include <lib/kprintf.h>
 #include <mem/pmm.h>
 #include <gdt/gdt.h>
+#include <idt/idt.h>
 
 __attribute__((used, section(".limine_requests")))
 static volatile uint64_t limine_base_revision[] = LIMINE_BASE_REVISION(6);
@@ -44,7 +45,12 @@ void kmain(void) {
 		hcf();
 	}
 
-	kprintf_screen("GDT initialization successful.");	
+	if (init_idt() != 0) {
+		hcf();
+	}
+
+	// test exception handling
+	__asm__ volatile ("int $3");	
 
 	hcf();
 }
