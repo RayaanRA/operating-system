@@ -7,11 +7,11 @@ gdt_t gdt;
 gdt_ptr_t gdt_ptr;
 
 static void set_gdt_entry(uint8_t i, uint8_t access, uint8_t flags) {
-    gdt.entries[i].base_16 = 0;
-    gdt.entries[i].base_24 = 0;
-    gdt.entries[i].base_32 = 0;
+    gdt.entries[i].base_low = 0;
+    gdt.entries[i].base_mid = 0;
+    gdt.entries[i].base_high = 0;
     gdt.entries[i].limit_16 = 0;
-    gdt.entries[i].limit_20 = 0;
+    gdt.entries[i].limit_4 = 0;
 
     gdt.entries[i].access = access;
     gdt.entries[i].flags = flags;
