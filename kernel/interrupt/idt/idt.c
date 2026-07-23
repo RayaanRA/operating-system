@@ -1,4 +1,4 @@
-#include <idt/idt.h>
+#include <interrupt/idt/idt.h>
 
 __attribute__((aligned(0x10)))
 static idt_entry_t idt[256];
