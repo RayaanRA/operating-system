@@ -7,7 +7,7 @@
 #include <lib/kprintf.h>
 #include <mem/pmm.h>
 #include <gdt/gdt.h>
-#include <idt/idt.h>
+#include <interrupt/idt/idt.h>
 
 __attribute__((used, section(".limine_requests")))
 static volatile uint64_t limine_base_revision[] = LIMINE_BASE_REVISION(6);
