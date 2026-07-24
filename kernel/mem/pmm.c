@@ -110,6 +110,14 @@ uint64_t pmm_allocate() {
 	return phys_addr;
 }
 
+void pmm_free(uint64_t phys_addr) {
+	uint64_t page_i = phys_addr / PAGE_FRAME_SIZE;
+	uint64_t byte_i = page_i / 8;
+	uint8_t bit_i = page_i % 8;
+	bitmap[byte_i] &= ~(1 << bit_i);
+	kprintf_screen("Freed page starting at physical address %u", phys_addr);
+}
+
 void print_bitmap_byte(uint64_t i) {
     kprintf_screen("[");
 

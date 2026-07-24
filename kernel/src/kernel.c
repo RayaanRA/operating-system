@@ -49,8 +49,9 @@ void kmain(void) {
 		hcf();
 	}
 
-	// test exception handling
-	__asm__ volatile ("int $3");	
+	uint64_t page_frame = pmm_allocate();
+	kprintf_screen("Given page frame starting at %u\n", page_frame);
+	pmm_free(page_frame);	
 
 	hcf();
 }
