@@ -261,8 +261,8 @@ static uint8_t PC_FACE_MODERNOS_FONT[256][FONT_HEIGHT] = {
   {0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00}, // { } (255)
 };
 
-static int32_t cursor_x = 0;
-static int32_t cursor_y = 0; 
+static uint32_t cursor_x = 0;
+static uint32_t cursor_y = 0; 
 
 void fb_put_char(char c) {
   if (c == '\n' || c == '\r') {
@@ -289,7 +289,7 @@ void fb_put_char(char c) {
 		}
 	}
 	cursor_x += FONT_WIDTH * SCALE_FACTOR;
-	if (cursor_x > FONT_WIDTH * SCALE_FACTOR * 78) {
+	if (cursor_x >= get_screen_width()) {
     newline();
 	}
 }

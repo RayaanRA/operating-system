@@ -10,5 +10,7 @@
 #define GREEN 0x000000000000FF00
 
 void draw_pixel(int32_t x, int32_t y, uint64_t color);
+uint64_t get_screen_width();
+uint64_t get_screen_height();
 
 #endif

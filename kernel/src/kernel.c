@@ -49,9 +49,8 @@ void kmain(void) {
 		hcf();
 	}
 
-	uint64_t page_frame = pmm_allocate();
-	kprintf_screen("Given page frame starting at %u\n", page_frame);
-	pmm_free(page_frame);	
+	kprintf_screen("%d:%b\n", -1LL, -1LL);
+	kprintf_screen("%u:%b", 16, 16);
 
 	hcf();
 }

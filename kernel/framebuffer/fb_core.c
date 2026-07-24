@@ -23,3 +23,11 @@ void draw_pixel(int32_t x, int32_t y, uint64_t color) {
 	uint32_t *fb_ptr = framebuffer->address;
 	fb_ptr[y * (framebuffer->pitch / 4) + x] = color;
 }
+
+uint64_t get_screen_width() {
+	return framebuffer->width;
+}
+
+uint64_t get_screen_height() {
+	return framebuffer->height;
+}
