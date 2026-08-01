@@ -19,7 +19,6 @@ static volatile struct limine_hhdm_request hhdm_request = {
 uint64_t find_highest_addr();
 void place_bitmap();
 void populate_bitmap();
-void print_bitmap_byte(uint64_t i);
 
 static uint64_t entry_count;
 static uint8_t *bitmap;
@@ -96,11 +95,9 @@ uint64_t pmm_allocate() {
 	for (uint64_t i = 0; i < bitmap_bytes; i++) {
 		for (size_t j = 0; j < 8; j++) {
         	if (!((bitmap[i] >> j) & 1)) {
-            	kprintf_screen("Byte %u before alloc: ", i);
-            	print_bitmap_byte(i);
+            	kprintf_screen("Byte %u before alloc: %b\n", i, bitmap[i]);
             	bitmap[i] |= 1 << j;
-            	kprintf_screen("Byte %u after alloc: ", i);
-            	print_bitmap_byte(i);            	
+            	kprintf_screen("Byte %u after alloc: %b\n", i, bitmap[i]);           	
             	phys_addr = ((i * 8) + j) * PAGE_FRAME_SIZE;
             	goto loop_end;
         	} 				
@@ -116,17 +113,4 @@ void pmm_free(uint64_t phys_addr) {
 	uint8_t bit_i = page_i % 8;
 	bitmap[byte_i] &= ~(1 << bit_i);
 	kprintf_screen("Freed page starting at physical address %u", phys_addr);
-}
-
-void print_bitmap_byte(uint64_t i) {
-    kprintf_screen("[");
-
-    for (size_t j = 8; j > 0; j--) {
-        if ((bitmap[i] >> (j - 1)) & 1) {
-            kprintf_screen("1");
-        } else {
-            kprintf_screen("0");
-        }
-    }    
-    kprintf_screen("]\n");
 }

@@ -49,8 +49,9 @@ void kmain(void) {
 		hcf();
 	}
 
-	kprintf_screen("%d:%b\n", -1LL, -1LL);
-	kprintf_screen("%u:%b", 16, 16);
+	kprintf_screen("PMM test\n");
+	uint64_t phys_addr = pmm_allocate();
+	pmm_free(phys_addr);
 
 	hcf();
 }
