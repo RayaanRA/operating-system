@@ -24,11 +24,6 @@ endif
 
 LD := $(TOOLCHAIN_PREFIX)ld
 
-ifeq ($(TOOLCHAIN),llvm)
-    CC := clang
-    LD := ld.lld
-endif
-
 CFLAGS := -g -O2 -pipe
 CPPFLAGS :=
 NASMFLAGS := -g
@@ -62,12 +57,6 @@ CPPFLAGS := \
     -I ../include/kernel \
     $(CPPFLAGS) \
     -MMD -MP
-
-override CC_IS_CLANG := $(shell ! $(CC) --version 2>/dev/null | grep -q '^Target: '; echo $$?)
-
-ifeq ($(CC_IS_CLANG),1)
-    override CC += -target x86_64-unknown-none-elf
-endif
 
 override SRCFILES := $(shell find -L . -type f 2>/dev/null | LC_ALL=C sort)
 override CFILES := $(filter %.c,$(SRCFILES))
