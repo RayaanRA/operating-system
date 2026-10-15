@@ -62,7 +62,7 @@ uint64_t find_highest_addr() {
 
 void place_bitmap() {
 	for (size_t i = 0; i < entry_count; i++) {
-		if (entries[i]->type == LIMINE_MEMMAP_USABLE && entries[i]->length >= bitmap_size) {
+		if (entries[i]->type == LIMINE_MEMMAP_USABLE && entries[i]->length >= bitmap_size) { // find first largest entry to place bitmap
 			bitmap = (uint8_t*)(entries[i]->base + hhdm_offset);
 			memset(bitmap, 0xFF, bitmap_bytes);
 			entries[i]->base += bitmap_size;
