@@ -17,5 +17,5 @@ When building, have the [`limine-binary`](https://github.com/Limine-Bootloader/L
 folder at the root of the project folder.
 
 
-This project started from [OSDev's Limine Bare Bones](wiki.osdev.org/Limine_Bare_Bones) setup, and is also a
+This project started from [OSDev's Limine Bare Bones](https://wiki.osdev.org/Limine_Bare_Bones) setup, and is also a
 major resource in writing this OS so far.
